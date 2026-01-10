@@ -13,3 +13,4 @@ export const getWeather = async (req, res) => {
     return success(res, data, 'Data Found');
 };
 
+

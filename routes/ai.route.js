@@ -3,15 +3,16 @@ const router = express.Router();
 import {getAiResponse, getImageAnalysis} from '../controllers/ai.controller.js';
 import { asyncHandler } from "../utils/asyncHandler.js"
 import multer from "multer";
+import { ErrorCodes } from "../utils/constants.js";
 
 const upload = multer({
   dest: 'uploads/',
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  limits: { fileSize: 5 * 1024 * 1024 }, 
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
-      cb(new Error("Only image files are allowed"));
+      cb(new Error(ErrorCodes.INVALID_FILE_TYPE), false);
     }
   }
 });

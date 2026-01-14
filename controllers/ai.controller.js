@@ -1,6 +1,8 @@
-import { genrateAiResponse } from "../services/ai.service.js";
+import { genrateAiResponseService, imageAnalysisService } from "../services/ai.service.js";
+import { ErrorCodes } from "../utils/constants.js";
 import { FlorixBotPrompt, ImageAnalysisPrompt } from "../utils/prompt.js";
 import { error } from "../utils/response.js";
+import fs from 'fs';
 
 
 export const getAiResponse = async (req, res) => {
@@ -11,7 +13,7 @@ export const getAiResponse = async (req, res) => {
 
 
     if (!userPrompt || userPrompt.trim() === "") {
-        return error(res, "User prompt is required", 400);
+        return error(res, ErrorCodes.PROMPT_REQUIRED, 400);
     }
     if (!country || country.trim() === "") {
         country = "International";
@@ -19,7 +21,7 @@ export const getAiResponse = async (req, res) => {
 
     const prompt = FlorixBotPrompt(country, userPrompt);
 
-    const data = await genrateAiResponse(req, res, prompt)
+    const data = await genrateAiResponseService(prompt)
 
     return res.status(200).json({
         success: true,
@@ -27,42 +29,38 @@ export const getAiResponse = async (req, res) => {
     });
 };
 
-
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import fs from 'fs';
-
 export const getImageAnalysis = async (req, res) => {
     const imagePath = req.file?.path;
-    console.log("Received file:", req.file);
     let { country } = req.body;
 
-    if(!imagePath || imagePath.trim() === ""){
-        error(res, "Image path is required", 400);
+    if (!imagePath || imagePath.trim() === "") {
+        return error(res, ErrorCodes.IMAGE_REQUIRED, 400);
     }
-
-    if(!country || country.trim() === ""){
+    if (!country || country.trim() === "") {
         country = "International";
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    try {
+        const imageData = {
+            inlineData: {
+                data: Buffer.from(fs.readFileSync(imagePath)).toString("base64"),
+                mimeType: req.file.mimetype,
+            },
+        };
+        const prompt = ImageAnalysisPrompt(country)
+        const data = await imageAnalysisService(imageData, prompt)
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" })
+        return res.status(200).json({
+            success: true,
+            data,
+        });
+    } finally {
+        if (imagePath) {
+            await fs.promises.unlink(imagePath).catch(() => {
+                return console.warn("Failed to delete uploaded image file");
+            })
+        }
+    }
 
-    const imageData = {
-    inlineData: {
-      data: Buffer.from(fs.readFileSync(imagePath)).toString("base64"),
-      mimeType: req.file.mimetype, 
-    },
-    };
 
-    const prompt = ImageAnalysisPrompt(country)
-
-    const result = await model.generateContent([imageData, prompt])
-
-    fs.unlinkSync(imagePath);
-
-    return res.status(200).json({
-        success: true,
-        data: result.response.text(),
-    });
 }

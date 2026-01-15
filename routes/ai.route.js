@@ -6,8 +6,8 @@ import multer from "multer";
 import { ErrorCodes } from "../utils/constants.js";
 
 const upload = multer({
-  dest: 'uploads/',
-  limits: { fileSize: 5 * 1024 * 1024 }, 
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
@@ -16,6 +16,7 @@ const upload = multer({
     }
   }
 });
+
 
 router.post('/getAiResponse', asyncHandler(getAiResponse));
 router.post('/getImageAnalysis', upload.single('imagePath'), asyncHandler(getImageAnalysis));

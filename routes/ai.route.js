@@ -2,7 +2,6 @@ import express from "express";
 const router = express.Router();
 import {getAiResponse, getImageAnalysis} from '../controllers/ai.controller.js';
 import { asyncHandler } from "../utils/asyncHandler.js"
-import { ErrorCodes } from "../utils/constants.js";
 
 
 

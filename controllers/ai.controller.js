@@ -1,8 +1,6 @@
 import { genrateAiResponseService, imageAnalysisService } from "../services/ai.service.js";
-import { deleteImage, uploadImage } from "../utils/cloudinary.js";
 import { ErrorCodes } from "../utils/constants.js";
-import { imageUrlToBase64 } from "../utils/imageToBase64.js";
-import { FlorixBotPrompt, ImageAnalysisPrompt } from "../utils/prompt.js";
+import { FlorixBotPrompt } from "../utils/prompt.js";
 import { error } from "../utils/response.js";
 
 

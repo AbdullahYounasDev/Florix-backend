@@ -66,7 +66,6 @@ Immediate Actions:
 Regional Alert: One specific tip for ${country} farmers regarding ${UserSelectedTip}.
 
 4. Conciseness Rules:
-- No markdown formatting like ** or --
 - No other growth stages mentioned
 - No general crop cultivation overview
 - Only what farmer needs for ${UserSelectedTip} right now
@@ -121,7 +120,6 @@ Safety Note: One precaution if chemical treatment mentioned
 Regional Alert: One specific tip for ${country} farmers regarding ${UserSelectedDisease} management.
 
 4. Conciseness Rules:
-- No markdown formatting like ** or --
 - No other pests or diseases mentioned
 - No general crop care overview
 - Only what farmer needs to identify and treat ${UserSelectedDisease} right now

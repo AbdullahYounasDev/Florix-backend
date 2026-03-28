@@ -1,9 +1,10 @@
 import express from "express";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { getPestDiseaseList } from "../controllers/tools.controller.js";
+import { getCultivationTips, getPestsAndDiseases } from "../controllers/tools.controller.js";
 const router = express.Router();
 
 
-router.post('/getPestDiseaseList', asyncHandler(getPestDiseaseList))
+router.post('/getCultivationTips', asyncHandler(getCultivationTips))
+router.post('/getPestsAndDiseases', asyncHandler(getPestsAndDiseases))
 
 export default router;

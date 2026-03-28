@@ -1,53 +1,76 @@
-import axios from "axios";
 import { ErrorCodes } from "../utils/constants.js";
 import { error } from "../utils/response.js";
+import { genrateAiResponseService } from "../services/ai.service.js";
+import { CultivationTipsPrompt, PestsAndDiseasesPrompt } from "../utils/prompt.js";
+import { Redis } from "@upstash/redis";
+import dotenv from 'dotenv';
+dotenv.config();
 
+const redis = new Redis({
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
+});
 
-export const getPestDiseaseList = async (req, res) => {
-    const PERENUAL_API_KEY = process.env.PERENUAL_API_KEY;
-    console.log(PERENUAL_API_KEY)
-    const { cropName } = req.body;
-    console.log(cropName)
+export const getCultivationTips = async (req, res) => {
+    const { country, city, plant, UserSelectedTip } = req.body;
 
-    if (!cropName || cropName.trim() === "") {
+    if (!plant || plant.trim() === "") {
         return error(res, ErrorCodes.CROP_NAME_REQUIRED, 400);
     }
 
-    const response = await axios.get(`https://perenual.com/api/pest-disease-list`, {
-        params: {
-            key: PERENUAL_API_KEY,
-            q: cropName
-        }
-    });
-    console.log(response)
+    if (!UserSelectedTip || UserSelectedTip.trim() === "") {
+        return error(res, ErrorCodes.TIP_REQUIRED, 400);
+    }
 
-    const apiResponse = response.data.data;
+    const sanitizedCountry = country?.trim() || "International";
+    const sanitizedCity = city?.trim() || "International";
+    
+    // Create cache key
+    const cacheKey = `tip:${sanitizedCountry}:${sanitizedCity}:${plant}:${UserSelectedTip}`;
+    
+    // Check cache first
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+        return res.status(200).json({
+            success: true,
+            data: cached,
+            cached: true
+        });
+    }
 
-    const filteredResults = apiResponse.filter(item => {
-        // We check if any host name matches the cropName
-        return item.host.some(hostName => 
-            hostName.toLowerCase().includes(cropName.toLowerCase())
-        );
-    });
+    const prompt = CultivationTipsPrompt(sanitizedCountry, sanitizedCity, plant, UserSelectedTip);
+    const data = await genrateAiResponseService(prompt);
+    
+    // Store in cache for 24 hours
+    await redis.set(cacheKey, data, { ex: 86400 });
 
-    // Filter logic to separate the two for your UI
-    const diseases = filteredResults.filter(item => {
-        const name = item.common_name.toLowerCase();
-        const desc = JSON.stringify(item.description).toLowerCase();
-        // Look for keywords that identify it as a disease
-        return name.includes('wilt') || name.includes('gall') || name.includes('mildew') || desc.includes('fungus') || desc.includes('bacterium');
-    });
-
-    const pests = filteredResults.filter(item => {
-        const name = item.common_name.toLowerCase();
-        const desc = JSON.stringify(item.description).toLowerCase();
-        // Look for keywords that identify it as a pest/insect
-        return name.includes('borer') || name.includes('aphid') || name.includes('mite') || desc.includes('insect') || desc.includes('larvae');
-    });
-
-    res.json({
+    return res.status(200).json({
         success: true,
-        diseases: diseases, // Default selected in your app
-        pests: pests        // Show when user clicks Pests toggle
+        data,
+        cached: false
     });
-}
+};
+
+export const getPestsAndDiseases = async (req, res) => {
+    const { country, city, plant, UserSelectedDisease } = req.body;
+
+    if (!plant || plant.trim() === "") {
+        return error(res, ErrorCodes.CROP_NAME_REQUIRED, 400);
+    }
+
+    if (!UserSelectedDisease || UserSelectedDisease.trim() === "") {
+        return error(res, ErrorCodes.TIP_REQUIRED, 400);
+    }
+
+    const sanitizedCountry = country?.trim() || "International";
+    const sanitizedCity = city?.trim() || "International";
+
+    const prompt = PestsAndDiseasesPrompt(sanitizedCountry, sanitizedCity, plant, UserSelectedDisease);
+
+    const data = await genrateAiResponseService(prompt)
+
+    return res.status(200).json({
+        success: true,
+        data,
+    });
+};

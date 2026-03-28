@@ -1,11 +1,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { ErrorCodes } from "../utils/constants.js";
 
-const apiKey = process.env.GEMINI_API_KEY;
-
 export const genrateAiResponseService = async (prompt) => {
 
-    const genAI = new GoogleGenerativeAI(apiKey);
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const result = await model.generateContent(prompt);

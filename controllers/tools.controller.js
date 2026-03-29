@@ -64,13 +64,29 @@ export const getPestsAndDiseases = async (req, res) => {
 
     const sanitizedCountry = country?.trim() || "International";
     const sanitizedCity = city?.trim() || "International";
+    
+    // Create cache key
+    const cacheKey = `pest:${sanitizedCountry}:${sanitizedCity}:${plant}:${UserSelectedDisease}`;
+    
+    // Check cache first
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+        return res.status(200).json({
+            success: true,
+            data: cached,
+            cached: true
+        });
+    }
 
     const prompt = PestsAndDiseasesPrompt(sanitizedCountry, sanitizedCity, plant, UserSelectedDisease);
-
-    const data = await genrateAiResponseService(prompt)
+    const data = await genrateAiResponseService(prompt);
+    
+    // Store in cache for 24 hours
+    await redis.set(cacheKey, data, { ex: 86400 });
 
     return res.status(200).json({
         success: true,
         data,
+        cached: false
     });
 };

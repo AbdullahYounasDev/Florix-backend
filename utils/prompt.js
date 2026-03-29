@@ -48,31 +48,31 @@ Instructions:
 
 1. Stay Focused: Address ONLY "${UserSelectedTip}" for ${plant}. Do NOT discuss other growth stages. Keep response concise and immediately actionable.
 
-2. Location Relevance: Tailor advice specifically to ${city}, ${country} climate and current month ${currentMonthName}.
+2. Response Structure (strict format):
 
-3. Response Structure (strict format):
-
-Overview: One sentence stating if ${currentMonthName} is suitable for this stage in ${city}.
+Overview: One sentence introducing the key principle for "${UserSelectedTip}" in general cultivation.
 
 Key Guidance (for ${UserSelectedTip}):
 - Critical tasks: Maximum 3 bullet points
-- Timing: When this stage occurs for ${plant} in ${country}
-- Visual indicators: What farmer should see
+- Timing: When this stage typically occurs for ${plant}
+- Visual indicators: What farmer should see during this stage
 - Common mistakes to avoid
 
 Immediate Actions:
-- 3 actionable steps farmer can take today
+- 3 actionable steps farmer can take
 
 Regional Alert: One specific tip for ${country} farmers regarding ${UserSelectedTip}.
 
-4. Conciseness Rules:
+Location & Time Specific Note: End with a concise note stating: "For ${city}, ${country} in ${currentMonthName} ${currentYear}, [insert relevant seasonal/location-specific advice related to ${UserSelectedTip}]."
+
+3. Conciseness Rules:
 - No other growth stages mentioned
 - No general crop cultivation overview
-- Only what farmer needs for ${UserSelectedTip} right now
+- Only what farmer needs for ${UserSelectedTip}
 
-5. Professional Standards:
+4. Professional Standards:
 - Use metric units (kg, hectare, mm)
-- Include safety note if neccessry to ${UserSelectedTip}
+- Include safety note if necessary to ${UserSelectedTip}
 - Ensure advice is practical for immediate use
 
 Generate response now following this exact structure.`;
@@ -96,11 +96,9 @@ Instructions:
 
 1. Stay Focused: Address ONLY "${UserSelectedDisease}" affecting ${plant}. Do NOT discuss other pests, diseases, or growth stages. Keep response concise and immediately actionable.
 
-2. Location Relevance: Tailor advice specifically to ${city}, ${country} climate and current month ${currentMonthName}. Consider regional disease pressure and resistance patterns.
+2. Response Structure (strict format):
 
-3. Response Structure (strict format):
-
-Overview: One sentence confirming if ${currentMonthName} is peak season for this pest/disease in ${city}.
+Overview: One sentence introducing what "${UserSelectedDisease}" is, what causes it (pathogen or pest type), and why it occurs on ${plant}.
 
 Identification:
 - Visual symptoms: 2-3 clear signs farmer can see on plant
@@ -117,18 +115,19 @@ Immediate Actions:
 
 Safety Note: One precaution if chemical treatment mentioned
 
-Regional Alert: One specific tip for ${country} farmers regarding ${UserSelectedDisease} management.
+Location & Time Specific Insight: End with a concise note stating: "In ${city}, ${country} during ${currentMonthName} ${currentYear}, farmers commonly use [specific local treatment/method] to manage this issue effectively."
 
-4. Conciseness Rules:
+3. Conciseness Rules:
 - No other pests or diseases mentioned
 - No general crop care overview
 - Only what farmer needs to identify and treat ${UserSelectedDisease} right now
 
-5. Professional Standards:
+4. Professional Standards:
 - Use metric units (mL, kg, hectare)
 - Include pre-harvest interval if applicable
 - Emphasize integrated pest management principles
 - Ensure advice is practical for immediate use
+- Base treatment recommendations on ${country} regulations and availability
 
 Generate response now following this exact structure.`;
 };

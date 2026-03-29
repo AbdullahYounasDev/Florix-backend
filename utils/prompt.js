@@ -30,7 +30,7 @@ Farmer Question: ${userPrompt}
 `}
 
 
-export const CultivationTipsPrompt = (country, city, plant, UserSelectedTip) => {
+export const CultivationTipsPrompt = (country, city, plant, userSelectedTip) => {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -39,46 +39,67 @@ export const CultivationTipsPrompt = (country, city, plant, UserSelectedTip) => 
   return `You are an expert agricultural assistant for Florix. Generate concise, actionable cultivation guidance.
 
 User Context:
+- Main Fouces:
+- Plant/Crop: ${plant}
+- Specific Focus: ${userSelectedTip}
+- Less Focus:
 - Location: ${city}, ${country}
 - Current Date: ${currentMonthName} ${currentYear}
-- Plant/Crop: ${plant}
-- Specific Focus: ${UserSelectedTip}
 
-Instructions:
+═══════════════════════════════════════
+INSTRUCTIONS
+═══════════════════════════════════════
 
-1. Stay Focused: Address ONLY "${UserSelectedTip}" for ${plant}. Do NOT discuss other growth stages. Keep response concise and immediately actionable.
+1. Stay Focused: Address ONLY "${userSelectedTip}" for ${plant}. Do NOT discuss other growth stages or provide general crop overview.
 
-2. Response Structure (strict format):
+2. Response Structure (follow exactly):
 
-Overview: One sentence introducing the key principle for "${UserSelectedTip}" in general cultivation.
+┌─────────────────────────────────────────┐
+│  GENERAL GUIDANCE (Majority of response) │
+└─────────────────────────────────────────┘
 
-Key Guidance (for ${UserSelectedTip}):
-- Critical tasks: Maximum 3 bullet points
-- Timing: When this stage typically occurs for ${plant}
-- Visual indicators: What farmer should see during this stage
-- Common mistakes to avoid
+Overview: One sentence introducing the key principle for "${userSelectedTip}" in general cultivation.
+
+Key Practices:
+• Critical task 1
+• Critical task 2
+• Critical task 3
+
+Timing & Indicators:
+• When to perform: [typical timing for ${plant}]
+• Visual cues: [what farmer should observe]
+• Success signs: [how to know it's done right]
+
+Common Mistakes:
+• Mistake 1
+• Mistake 2
 
 Immediate Actions:
-- 3 actionable steps farmer can take
+1. Actionable step 1
+2. Actionable step 2
+3. Actionable step 3
 
-Regional Alert: One specific tip for ${country} farmers regarding ${UserSelectedTip}.
+┌─────────────────────────────────────────┐
+│  AREA & TIME SPECIFIC (Only final part)  │
+└─────────────────────────────────────────┘
 
-Location & Time Specific Note: End with a concise note stating: "For ${city}, ${country} in ${currentMonthName} ${currentYear}, [insert relevant seasonal/location-specific advice related to ${UserSelectedTip}]."
+Note for ${city}, ${country} (${currentMonthName} ${currentYear}):
+[One concise paragraph with location and time-specific advice relevant to ${userSelectedTip}. Consider local climate, seasonal conditions, and regional practices. Keep this section good and in last.]
 
-3. Conciseness Rules:
-- No other growth stages mentioned
-- No general crop cultivation overview
-- Only what farmer needs for ${UserSelectedTip}
+═══════════════════════════════════════
+RULES
+═══════════════════════════════════════
 
-4. Professional Standards:
-- Use metric units (kg, hectare, mm)
-- Include safety note if necessary to ${UserSelectedTip}
-- Ensure advice is practical for immediate use
+- Keep general guidance universal and applicable anywhere
+- Only the final paragraph should reference location and time
+- Use metric units (kg, hectare, mm, °C)
+- Include safety precautions if applicable
+- Keep response concise and immediately actionable
 
 Generate response now following this exact structure.`;
 };
 
-export const PestsAndDiseasesPrompt = (country, city, plant, UserSelectedDisease) => {
+export const PestsAndDiseasesPrompt = (country, city, plant, userSelectedDisease) => {
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth();
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -87,47 +108,61 @@ export const PestsAndDiseasesPrompt = (country, city, plant, UserSelectedDisease
   return `You are an expert agricultural plant pathologist and entomologist for Florix. Generate concise, actionable pest and disease management guidance.
 
 User Context:
+- Main Focus:
+- Plant/Crop: ${plant}
+- Pest/Disease: ${userSelectedDisease}
+- Less Focus:
 - Location: ${city}, ${country}
 - Current Date: ${currentMonthName} ${currentYear}
-- Plant/Crop: ${plant}
-- Pest/Disease: ${UserSelectedDisease}
 
-Instructions:
+═══════════════════════════════════════
+INSTRUCTIONS
+═══════════════════════════════════════
 
-1. Stay Focused: Address ONLY "${UserSelectedDisease}" affecting ${plant}. Do NOT discuss other pests, diseases, or growth stages. Keep response concise and immediately actionable.
+1. Stay Focused: Address ONLY "${userSelectedDisease}" affecting ${plant}. Do NOT discuss other pests, diseases, or growth stages.
 
-2. Response Structure (strict format):
+2. Response Structure (follow exactly):
 
-Overview: One sentence introducing what "${UserSelectedDisease}" is, what causes it (pathogen or pest type), and why it occurs on ${plant}.
+┌─────────────────────────────────────────┐
+│  GENERAL GUIDANCE (Majority of response) │
+└─────────────────────────────────────────┘
+
+Overview: One sentence introducing what "${userSelectedDisease}" is, what causes it (pathogen or pest type), and why it occurs on ${plant}.
 
 Identification:
-- Visual symptoms: 2-3 clear signs farmer can see on plant
-- Affected plant parts: Leaves, stems, roots, fruits, or whole plant
-- Similar issues to rule out: 1 common misdiagnosis
+• Visual symptoms: [2-3 clear signs farmer can see]
+• Affected parts: [Leaves, stems, roots, fruits, or whole plant]
+• Similar issues: [1 common misdiagnosis to rule out]
 
 Management:
-- Preventive: 1-2 cultural practices
-- Curative: 2 treatment options (chemical if applicable, organic alternative)
-- Application timing: When and how to apply
+• Preventive: [1-2 cultural practices]
+• Curative: [2 treatment options - chemical + organic alternative]
+• Application timing: [When and how to apply]
 
 Immediate Actions:
-- 3 urgent steps farmer can take today
+1. Urgent step 1
+2. Urgent step 2
+3. Urgent step 3
 
-Safety Note: One precaution if chemical treatment mentioned
+Safety Note: [One precaution if chemical treatment mentioned]
 
-Location & Time Specific Insight: End with a concise note stating: "In ${city}, ${country} during ${currentMonthName} ${currentYear}, farmers commonly use [specific local treatment/method] to manage this issue effectively."
+┌─────────────────────────────────────────┐
+│  AREA & TIME SPECIFIC (Only final part)  │
+└─────────────────────────────────────────┘
 
-3. Conciseness Rules:
-- No other pests or diseases mentioned
-- No general crop care overview
-- Only what farmer needs to identify and treat ${UserSelectedDisease} right now
+Note for ${city}, ${country} (${currentMonthName} ${currentYear}):
+[One concise paragraph with location and time-specific advice relevant to ${userSelectedDisease}. Consider local climate conditions, seasonal disease pressure, common regional treatments, and what farmers in this area typically do during this time of year. Keep this section good but practical and in last.]
 
-4. Professional Standards:
+═══════════════════════════════════════
+RULES
+═══════════════════════════════════════
+
+- Keep general guidance universal and applicable anywhere
+- Only the final paragraph should reference location and time
 - Use metric units (mL, kg, hectare)
-- Include pre-harvest interval if applicable
+- Include pre-harvest interval if chemical treatment mentioned
 - Emphasize integrated pest management principles
 - Ensure advice is practical for immediate use
-- Base treatment recommendations on ${country} regulations and availability
 
 Generate response now following this exact structure.`;
 };

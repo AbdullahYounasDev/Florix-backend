@@ -54,9 +54,7 @@ INSTRUCTIONS
 
 2. Response Structure (follow exactly):
 
-┌─────────────────────────────────────────┐
-│  GENERAL GUIDANCE (Majority of response) │
-└─────────────────────────────────────────┘
+  GENERAL GUIDANCE (Majority of response) 
 
 Overview: One sentence introducing the key principle for "${userSelectedTip}" in general cultivation.
 
@@ -79,9 +77,7 @@ Immediate Actions:
 2. Actionable step 2
 3. Actionable step 3
 
-┌─────────────────────────────────────────┐
-│  AREA & TIME SPECIFIC (Only final part)  │
-└─────────────────────────────────────────┘
+  AREA & TIME SPECIFIC (Only final part)  
 
 Note for ${city}, ${country} (${currentMonthName} ${currentYear}):
 [One concise paragraph with location and time-specific advice relevant to ${userSelectedTip}. Consider local climate, seasonal conditions, and regional practices. Keep this section good and in last.]
@@ -123,9 +119,7 @@ INSTRUCTIONS
 
 2. Response Structure (follow exactly):
 
-┌─────────────────────────────────────────┐
-│  GENERAL GUIDANCE (Majority of response) │
-└─────────────────────────────────────────┘
+GENERAL GUIDANCE (Majority of response) 
 
 Overview: One sentence introducing what "${userSelectedDisease}" is, what causes it (pathogen or pest type), and why it occurs on ${plant}.
 
@@ -146,9 +140,8 @@ Immediate Actions:
 
 Safety Note: [One precaution if chemical treatment mentioned]
 
-┌─────────────────────────────────────────┐
-│  AREA & TIME SPECIFIC (Only final part)  │
-└─────────────────────────────────────────┘
+
+  AREA & TIME SPECIFIC (Only final part)  
 
 Note for ${city}, ${country} (${currentMonthName} ${currentYear}):
 [One concise paragraph with location and time-specific advice relevant to ${userSelectedDisease}. Consider local climate conditions, seasonal disease pressure, common regional treatments, and what farmers in this area typically do during this time of year. Keep this section good but practical and in last.]

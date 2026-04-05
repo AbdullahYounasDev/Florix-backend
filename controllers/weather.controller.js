@@ -41,9 +41,28 @@ export const getWeather = async (req, res) => {
     return "Night";
   };
 
+  // today's date string e.g. "2026-04-05"
+  const todayDate = raw.daily.time[0];
+
+  // filter only today's hourly indexes
+  const todayHourly = raw.hourly.time
+    .map((t, i) => (t.startsWith(todayDate) ? i : -1))
+    .filter((i) => i !== -1)
+    .map((i) => ({
+      time:       raw.hourly.time[i].slice(11, 16),        // "14:00"
+      temp:       Math.round(raw.hourly.temperature_2m[i]),
+      feels:      Math.round(raw.hourly.apparent_temperature[i]),
+      humidity:   raw.hourly.relativehumidity_2m[i],
+      windSpeed:  raw.hourly.windspeed_10m[i],
+      clouds:     raw.hourly.cloudcover[i],
+      rainChance: raw.hourly.precipitation_probability[i],
+      condition:  wmoCondition(raw.hourly.weathercode[i]).main,
+      desc:       wmoCondition(raw.hourly.weathercode[i]).desc,
+    }));
+
   const response = {
-    city: locationData?.city,
-    country: locationData?.country,
+    city:        locationData?.city,
+    country:     locationData?.country,
     countryCode: locationData?.countryCode,
 
     today: {
@@ -59,6 +78,8 @@ export const getWeather = async (req, res) => {
       isDay:      raw.current_weather.is_day === 1,
       timeOfDay:  getTimeOfDay(currentTime),
     },
+
+    hourly: todayHourly,
 
     forecast: raw.daily.time.map((date, i) => ({
       date,

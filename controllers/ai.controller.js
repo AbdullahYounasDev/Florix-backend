@@ -1,6 +1,6 @@
 import { genrateAiResponseService, imageAnalysisService } from "../services/ai.service.js";
 import { ErrorCodes } from "../utils/constants.js";
-import { CultivationTipsPrompt } from "../utils/prompt.js";
+import { CultivationTipsPrompt, FlorixBotPrompt } from "../utils/prompt.js";
 import { error } from "../utils/response.js";
 
 

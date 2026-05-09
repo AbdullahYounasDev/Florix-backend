@@ -1,9 +1,25 @@
 import { genrateAiResponseService, imageAnalysisService } from "../services/ai.service.js";
 import { ErrorCodes } from "../utils/constants.js";
-import { CultivationTipsPrompt, FlorixBotPrompt } from "../utils/prompt.js";
+import { CultivationTipsPrompt, FlorixBotPrompt, PlantTimelinePrompt } from "../utils/prompt.js";
 import { error } from "../utils/response.js";
 
 
+export const getCropsTimeline = async (req, res) => {
+    const { plant } = req.body;
+
+    if (!plant || plant.trim() === "") {
+        return error(res, ErrorCodes.CROP_NAME_REQUIRED, 400);
+    }
+
+    const prompt = PlantTimelinePrompt(plant);
+
+    const data = await genrateAiResponseService(prompt)
+
+    return res.status(200).json({
+        success: true,
+        data,
+    });
+};
 export const getCultivationTips = async (req, res) => {
     const { country, city, plant, UserSelectedTip } = req.body;
 

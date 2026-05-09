@@ -150,3 +150,48 @@ RULES
 
 Generate response now following this exact structure.`;
 };
+
+export const PlantTimelinePrompt = (plant) => {
+  return `You are an experienced agricultural scientist who has worked with farmers growing ${plant} for many years. Share your knowledge by creating a detailed cultivation timeline.
+
+Please respond with a JSON object following this structure (no text outside the JSON):
+
+{
+  "cropName": "the plant name",
+  "totalDuration": "total growing period, like '90-120 days' or '4-5 months'",
+  "climate": "ideal climate conditions",
+  "soilType": "best soil type for this crop",
+  "difficulty": "easy | moderate | hard",
+  "stages": [
+    {
+      "id": "unique_string",
+      "stage": "stage name like 'Land Preparation' or 'Seedling Stage'",
+      "days": "time range like 'Day 1-3', 'Week 2-4', or 'Month 2-3'",
+      "icon": "choose one: tractor, seed-outline, sprout, leaf, flower-poppy, fruit-cherries, water, barley, bug-outline, bottle-tonic-plus-outline, weather-sunny, weather-rainy, alert-outline",
+      "phase": "preparation | germination | vegetative | flowering | fruiting | harvesting | post-harvest",
+      "tasks": [
+        {
+          "id": "unique_task_id",
+          "text": "a clear instruction with specifics like measurements, depths, or frequencies",
+          "type": "action | fertilizer | water | pest | disease | warning | harvest"
+        }
+      ],
+      "tips": "one practical insight that helps avoid common mistakes or improve yield"
+    }
+  ]
+}
+
+A few things that would make this really valuable for farmers:
+
+- Cover the complete journey from land preparation through to harvest and storage, usually 5-8 stages feels right
+- Mix up the task types naturally across each stage — some actions, some fertilizer work, some watering, some pest checks
+- Get specific with the advice: "Apply 50kg DAP per acre worked into the topsoil" rather than just "apply fertilizer"
+- Sprinkle fertilizer guidance, irrigation timing, and pest monitoring throughout the stages where they naturally occur
+- Include a stage that focuses on pest and disease awareness, mentioning the common ones farmers face with ${plant}
+- Add a caution or common mistake to watch for in stages where things often go wrong
+- Use natural time descriptions like "First week", "Days 15-20", "Month 2" rather than strict daily sequences
+- Share those little tricks that experienced growers pick up over the years — the kind of thing that makes a real difference
+- Pick icons that visually match what's happening in each stage
+
+Think about what someone growing ${plant} actually needs to know, season by season. The kind of advice you'd give a fellow farmer over a cup of tea.`;
+};

@@ -2,6 +2,14 @@ import { genrateAiResponseService, imageAnalysisService } from "../services/ai.s
 import { ErrorCodes } from "../utils/constants.js";
 import { CultivationTipsPrompt, FlorixBotPrompt, PlantTimelinePrompt } from "../utils/prompt.js";
 import { error } from "../utils/response.js";
+import { Redis } from "@upstash/redis";
+import dotenv from 'dotenv';
+dotenv.config();
+
+const redis = new Redis({
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
+});
 
 
 export const getCropsTimeline = async (req, res) => {
@@ -11,13 +19,36 @@ export const getCropsTimeline = async (req, res) => {
         return error(res, ErrorCodes.CROP_NAME_REQUIRED, 400);
     }
 
-    const prompt = PlantTimelinePrompt(plant);
+    // Normalize plant name
+    const normalizedPlant = plant.trim().toLowerCase();
 
-    const data = await genrateAiResponseService(prompt)
+    // Create cache key
+    const cacheKey = `timeline|${normalizedPlant}`;
+
+    // Check cache first
+    const cached = await redis.get(cacheKey);
+
+    if (cached) {
+        return res.status(200).json({
+            success: true,
+            data: cached,
+            cached: true,
+        });
+    }
+
+    const prompt = PlantTimelinePrompt(normalizedPlant);
+
+    const data = await genrateAiResponseService(prompt);
+
+    // Store in Redis for 24 hours
+    await redis.set(cacheKey, data, {
+        ex: 86400,
+    });
 
     return res.status(200).json({
         success: true,
         data,
+        cached: false,
     });
 };
 export const getCultivationTips = async (req, res) => {
